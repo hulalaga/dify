@@ -6,7 +6,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/pop
 import { RiGlobalLine, RiUploadCloud2Line } from '@remixicon/react'
 import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@/app/notifications'
 import { FILE_URL_REGEX } from '../constants'
 import FileInput from '../file-input'
 import { useFile } from '../hooks'
@@ -58,7 +57,6 @@ const FileFromLinkOrLocal = ({
     try {
       const page = await captureWebPage()
       if (!page?.html) {
-        toast.error(t(($) => $['fileUploader.captureWebPageFailed'], { ns: 'common' }))
         return
       }
       const safeTitle = (page.title || '').replace(/[\\/:*?"<>|]+/g, '_').trim() || 'page'
