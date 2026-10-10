@@ -167,6 +167,8 @@
   "feedback.placeholder": "何が間違っていたか、またはどのように改善できるかを教えてください...",
   "feedback.subtitle": "この回答で何が間違っていたのか教えてください。",
   "feedback.title": "フィードバックを提供する",
+  "fileUploader.captureWebPage": "現在のページを取得",
+  "fileUploader.captureWebPageFailed": "現在のページの取得に失敗しました。もう一度お試しください。",
   "fileUploader.fileExtensionBlocked": "このファイルタイプは、セキュリティ上の理由でブロックされています",
   "fileUploader.fileExtensionNotSupport": "ファイル拡張子はサポートされていません",
   "fileUploader.pasteFileLink": "ファイルリンクの貼り付け",

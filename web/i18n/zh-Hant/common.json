@@ -167,6 +167,8 @@
   "feedback.placeholder": "請描述發生了什麼問題或我們可以如何改進...",
   "feedback.subtitle": "請告訴我們這個回應出了什麼問題",
   "feedback.title": "提供反饋",
+  "fileUploader.captureWebPage": "獲取當前網頁",
+  "fileUploader.captureWebPageFailed": "獲取當前網頁失敗，請重試。",
   "fileUploader.fileExtensionBlocked": "出於安全原因，此檔案類型被阻止",
   "fileUploader.fileExtensionNotSupport": "不支援檔擴展名",
   "fileUploader.pasteFileLink": "粘貼文件連結",

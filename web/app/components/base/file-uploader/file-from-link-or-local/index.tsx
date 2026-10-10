@@ -3,23 +3,27 @@ import type { FileUpload } from '@/app/components/base/features/types'
 import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { RiUploadCloud2Line } from '@remixicon/react'
-import { memo, useState } from 'react'
+import { RiGlobalLine, RiUploadCloud2Line } from '@remixicon/react'
+import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from '@/app/notifications'
 import { FILE_URL_REGEX } from '../constants'
 import FileInput from '../file-input'
 import { useFile } from '../hooks'
 import { useStore } from '../store'
+import { useCaptureWebPage } from '../use-capture-web-page'
 
 type FileFromLinkOrLocalProps = {
   showFromLink?: boolean
   showFromLocal?: boolean
+  showCaptureWebPage?: boolean
   trigger: NonNullable<PopoverTriggerProps['render']>
   fileConfig: FileUpload
 }
 const FileFromLinkOrLocal = ({
   showFromLink = true,
   showFromLocal = true,
+  showCaptureWebPage = false,
   trigger,
   fileConfig,
 }: FileFromLinkOrLocalProps) => {
@@ -27,7 +31,9 @@ const FileFromLinkOrLocal = ({
   const files = useStore((s) => s.files)
   const [url, setUrl] = useState('')
   const [showError, setShowError] = useState(false)
-  const { handleLoadFileFromLink } = useFile(fileConfig)
+  const [isCapturing, setIsCapturing] = useState(false)
+  const { handleLoadFileFromLink, handleLocalFileUpload } = useFile(fileConfig)
+  const { captureWebPage } = useCaptureWebPage()
   const disabled = !!fileConfig.number_limits && files.length >= fileConfig.number_limits
   const fileLinkPlaceholder = t(($) => $['fileUploader.pasteFileLinkInputPlaceholder'], {
     ns: 'common',
@@ -46,6 +52,22 @@ const FileFromLinkOrLocal = ({
     handleLoadFileFromLink(url)
     setUrl('')
   }
+
+  const handleCaptureWebPage = useCallback(async () => {
+    setIsCapturing(true)
+    try {
+      const page = await captureWebPage()
+      if (!page?.html) {
+        toast.error(t(($) => $['fileUploader.captureWebPageFailed'], { ns: 'common' }))
+        return
+      }
+      const safeTitle = (page.title || '').replace(/[\\/:*?"<>|]+/g, '_').trim() || 'page'
+      const file = new File([page.html], `${safeTitle}.html`, { type: 'text/html' })
+      handleLocalFileUpload(file)
+    } finally {
+      setIsCapturing(false)
+    }
+  }, [captureWebPage, handleLocalFileUpload, t])
 
   return (
     <Popover>
@@ -91,13 +113,7 @@ const FileFromLinkOrLocal = ({
               )}
             </>
           )}
-          {showFromLink && showFromLocal && (
-            <div className="flex h-7 items-center p-2 system-2xs-medium-uppercase text-text-quaternary">
-              <div className="mr-2 h-px w-23.25 bg-linear-to-l from-[rgba(16,24,40,0.08)]" />
-              OR
-              <div className="ml-2 h-px w-23.25 bg-linear-to-r from-[rgba(16,24,40,0.08)]" />
-            </div>
-          )}
+          {showFromLink && showFromLocal && <OrDivider />}
           {showFromLocal && (
             <Button className="relative w-full" variant="secondary-accent" disabled={disabled}>
               <RiUploadCloud2Line className="size-4" />
@@ -105,10 +121,31 @@ const FileFromLinkOrLocal = ({
               <FileInput fileConfig={fileConfig} />
             </Button>
           )}
+          {showCaptureWebPage && showFromLocal && <OrDivider />}
+          {showCaptureWebPage && (
+            <Button
+              className="relative w-full"
+              variant="secondary-accent"
+              disabled={disabled}
+              loading={isCapturing}
+              onClick={handleCaptureWebPage}
+            >
+              {!isCapturing && <RiGlobalLine className="size-4" />}
+              {t(($) => $['fileUploader.captureWebPage'], { ns: 'common' })}
+            </Button>
+          )}
         </div>
       </PopoverContent>
     </Popover>
   )
 }
+
+const OrDivider = () => (
+  <div className="flex h-7 items-center p-2 system-2xs-medium-uppercase text-text-quaternary">
+    <div className="mr-2 h-px w-23.25 bg-linear-to-l from-[rgba(16,24,40,0.08)]" />
+    OR
+    <div className="ml-2 h-px w-23.25 bg-linear-to-r from-[rgba(16,24,40,0.08)]" />
+  </div>
+)
 
 export default memo(FileFromLinkOrLocal)

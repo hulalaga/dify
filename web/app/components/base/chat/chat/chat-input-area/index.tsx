@@ -41,6 +41,7 @@ type ChatInputAreaProps = {
   speechToTextConfig?: EnableType
   speechToTextTarget?: SpeechToTextTarget
   onBeforeSpeechToText?: () => Promise<unknown>
+  showCaptureWebPage?: boolean
   onSend?: OnSend
   inputs?: Record<string, unknown>
   inputsForm?: InputForm[]
@@ -73,6 +74,7 @@ const ChatInputArea = ({
   speechToTextConfig = { enabled: true },
   speechToTextTarget,
   onBeforeSpeechToText,
+  showCaptureWebPage,
   onSend,
   inputs = {},
   inputsForm = [],
@@ -283,6 +285,7 @@ const ChatInputArea = ({
       ref={holdSpaceRef}
       readonly={readonly}
       fileConfig={visionConfig}
+      showCaptureWebPage={showCaptureWebPage}
       speechToTextConfig={speechToTextConfig}
       onShowVoiceInput={speechToTextTarget ? handleShowVoiceInput : undefined}
       onSend={handleSend}

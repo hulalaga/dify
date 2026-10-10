@@ -23,6 +23,7 @@ import {
 } from '@/service/share'
 import { submitHumanInputForm as submitHumanInputFormService } from '@/service/workflow'
 import { TransferMethod } from '@/types/app'
+import { isClient } from '@/utils/client'
 import { formatBooleanInputs } from '@/utils/model-config'
 import Chat from '../chat'
 import { useChat } from '../chat/hooks'
@@ -60,6 +61,9 @@ const ChatWrapper = () => {
   } = useChatWithHistoryContext()
 
   const appSourceType = isInstalledApp ? AppSourceType.installedApp : AppSourceType.webApp
+  // The webapp dialog is served inside the bubble's iframe; only there the host
+  // page can be captured through the embed bridge.
+  const isEmbeddedWebApp = isClient ? window.self !== window.top : false
   const timezone =
     appSourceType === AppSourceType.webApp
       ? new Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -462,6 +466,7 @@ const ChatWrapper = () => {
         theme={theme}
         switchSibling={doSwitchSibling}
         inputDisabled={inputDisabled}
+        showCaptureWebPage={isEmbeddedWebApp}
         sidebarCollapseState={sidebarCollapseState}
         renderAgentContent={renderAgentContent}
         questionIcon={

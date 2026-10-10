@@ -8,9 +8,14 @@ import FileFromLinkOrLocal from '../file-from-link-or-local'
 type FileUploaderInChatInputProps = {
   fileConfig: FileUpload
   readonly?: boolean
+  showCaptureWebPage?: boolean
 }
-const FileUploaderInChatInput = ({ fileConfig, readonly }: FileUploaderInChatInputProps) => {
-  const { t } = useTranslation()
+const FileUploaderInChatInput = ({
+  fileConfig,
+  readonly,
+  showCaptureWebPage,
+}: FileUploaderInChatInputProps) => {
+  const { t } = useTranslation(['common'])
   const renderTrigger = useCallback(() => {
     return (
       <button
@@ -38,6 +43,7 @@ const FileUploaderInChatInput = ({ fileConfig, readonly }: FileUploaderInChatInp
         <FileFromLinkOrLocal
           trigger={renderTrigger()}
           fileConfig={fileConfig}
+          showCaptureWebPage={showCaptureWebPage}
           showFromLocal={fileConfig?.allowed_file_upload_methods?.includes(
             TransferMethod.local_file,
           )}

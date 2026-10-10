@@ -12,6 +12,7 @@ import { FileUploaderInChatInput } from '@/app/components/base/file-uploader'
 type OperationProps = {
   readonly?: boolean
   fileConfig?: FileUpload
+  showCaptureWebPage?: boolean
   speechToTextConfig?: EnableType
   onShowVoiceInput?: () => void
   onSend: () => void
@@ -25,6 +26,7 @@ const Operation: FC<OperationProps> = ({
   readonly,
   ref,
   fileConfig,
+  showCaptureWebPage,
   speechToTextConfig,
   onShowVoiceInput,
   onSend,
@@ -40,7 +42,11 @@ const Operation: FC<OperationProps> = ({
       <div className="flex items-center pl-1" ref={ref}>
         <div className="flex items-center gap-1">
           {fileConfig?.enabled && (
-            <FileUploaderInChatInput readonly={readonly} fileConfig={fileConfig} />
+            <FileUploaderInChatInput
+              readonly={readonly}
+              fileConfig={fileConfig}
+              showCaptureWebPage={showCaptureWebPage}
+            />
           )}
           {speechToTextConfig?.enabled && onShowVoiceInput && (
             <IconButton
