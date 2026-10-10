@@ -165,6 +165,8 @@
   "feedback.placeholder": "Будь ласка, опишіть, що пішло не так або як ми можемо покращити...",
   "feedback.subtitle": "Будь ласка, скажіть нам, що пішло не так із цією відповіддю",
   "feedback.title": "Надати відгук",
+  "fileUploader.captureWebPage": "Get current page",
+  "fileUploader.captureWebPageFailed": "Failed to get the current page, please try again.",
   "fileUploader.fileExtensionBlocked": "Цей тип файлу заблоковано з міркувань безпеки",
   "fileUploader.fileExtensionNotSupport": "Розширення файлу не підтримується",
   "fileUploader.pasteFileLink": "Вставити посилання на файл",

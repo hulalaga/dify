@@ -165,6 +165,8 @@
   "feedback.placeholder": "لطفاً توضیح دهید که چه مشکلی پیش آمد یا چگونه می‌توانیم بهبود پیدا کنیم...",
   "feedback.subtitle": "لطفاً به ما بگویید که چه مشکلی در این پاسخ پیش آمده است.",
   "feedback.title": "بازخورد ارائه دهید",
+  "fileUploader.captureWebPage": "Get current page",
+  "fileUploader.captureWebPageFailed": "Failed to get the current page, please try again.",
   "fileUploader.fileExtensionBlocked": "این نوع فایل به دلایل امنیتی مسدود شده است",
   "fileUploader.fileExtensionNotSupport": "پسوند فایل پشتیبانی نمی شود",
   "fileUploader.pasteFileLink": "پیوند فایل را جایگذاری کنید",

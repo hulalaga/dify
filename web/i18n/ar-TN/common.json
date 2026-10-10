@@ -165,6 +165,8 @@
   "feedback.placeholder": "يرجى وصف ما حدث خطأ أو كيف يمكننا التحسين...",
   "feedback.subtitle": "من فضلك أخبرنا ما الخطأ في هذه الاستجابة",
   "feedback.title": "تقديم تعليق",
+  "fileUploader.captureWebPage": "Get current page",
+  "fileUploader.captureWebPageFailed": "Failed to get the current page, please try again.",
   "fileUploader.fileExtensionBlocked": "تم حظر نوع الملف هذا لأسباب أمنية",
   "fileUploader.fileExtensionNotSupport": "امتداد الملف غير مدعوم",
   "fileUploader.pasteFileLink": "لصق رابط الملف",

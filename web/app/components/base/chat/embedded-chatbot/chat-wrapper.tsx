@@ -23,6 +23,7 @@ import {
 } from '@/service/share'
 import { submitHumanInputForm as submitHumanInputFormService } from '@/service/workflow'
 import { TransferMethod } from '@/types/app'
+import { isClient } from '@/utils/client'
 import Chat from '../chat'
 import { useChat } from '../chat/hooks'
 import { getLastAnswer, isValidGeneratedAnswer } from '../utils'
@@ -57,6 +58,10 @@ const ChatWrapper = () => {
     initUserVariables,
     appSourceType,
   } = useEmbeddedChatbotContext()
+
+  // The webapp dialog is served inside the bubble's iframe; only there the host
+  // page can be captured through the embed bridge.
+  const isEmbeddedWebApp = isClient ? window.self !== window.top : false
 
   // Read sendOnEnter from URL params (e.g., ?sendOnEnter=false)
   const sendOnEnter = useMemo(() => {
@@ -467,6 +472,7 @@ const ChatWrapper = () => {
       themeBuilder={themeBuilder}
       switchSibling={doSwitchSibling}
       inputDisabled={inputDisabled}
+      showCaptureWebPage={isEmbeddedWebApp}
       sendOnEnter={sendOnEnter}
       questionIcon={
         initUserVariables?.avatar_url ? (

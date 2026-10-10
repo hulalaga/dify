@@ -165,6 +165,8 @@
   "feedback.placeholder": "Lütfen neyin yanlış gittiğini veya nasıl iyileşebileceğimizi açıklayın...",
   "feedback.subtitle": "Lütfen bu yanıtla ilgili neyin yanlış gittiğini bize bildirin",
   "feedback.title": "Geri Bildirim Sağla",
+  "fileUploader.captureWebPage": "Get current page",
+  "fileUploader.captureWebPageFailed": "Failed to get the current page, please try again.",
   "fileUploader.fileExtensionBlocked": "Bu dosya türü güvenlik nedenleriyle engellenmiştir",
   "fileUploader.fileExtensionNotSupport": "Dosya uzantısı desteklenmiyor",
   "fileUploader.pasteFileLink": "Dosya bağlantısını yapıştır",

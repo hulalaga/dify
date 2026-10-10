@@ -165,6 +165,8 @@
   "feedback.placeholder": "Пожалуйста, опишите, что пошло не так или как мы можем улучшиться...",
   "feedback.subtitle": "Пожалуйста, сообщите нам, что пошло не так с этим ответом",
   "feedback.title": "Оставить отзыв",
+  "fileUploader.captureWebPage": "Get current page",
+  "fileUploader.captureWebPageFailed": "Failed to get the current page, please try again.",
   "fileUploader.fileExtensionBlocked": "Этот тип файла заблокирован по соображениям безопасности",
   "fileUploader.fileExtensionNotSupport": "Расширение файла не поддерживается",
   "fileUploader.pasteFileLink": "Вставить ссылку на файл",

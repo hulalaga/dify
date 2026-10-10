@@ -234,6 +234,30 @@
       if (event.data.type === 'dify-chatbot-expand-change') {
         toggleExpand()
       }
+
+      // Allow the embedded webapp to capture the host page as an HTML file.
+      if (event.data.type === 'dify-chatbot-request-page-html') {
+        let payload
+        try {
+          const doctype = document.doctype
+            ? `<!DOCTYPE ${document.doctype.name}>\n`
+            : '<!DOCTYPE html>\n'
+          payload = {
+            html: doctype + document.documentElement.outerHTML,
+            title: document.title,
+            url: window.location.href,
+          }
+        } catch (error) {
+          payload = { error: error instanceof Error ? error.message : String(error) }
+        }
+        targetIframe.contentWindow?.postMessage(
+          {
+            type: 'dify-chatbot-page-html',
+            payload,
+          },
+          targetOrigin,
+        )
+      }
     })
 
     // Function to create the chat button

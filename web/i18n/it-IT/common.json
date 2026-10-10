@@ -165,6 +165,8 @@
   "feedback.placeholder": "Per favore descrivi cosa è andato storto o come possiamo migliorare...",
   "feedback.subtitle": "Per favore, dicci cosa è andato storto con questa risposta.",
   "feedback.title": "Fornire feedback",
+  "fileUploader.captureWebPage": "Get current page",
+  "fileUploader.captureWebPageFailed": "Failed to get the current page, please try again.",
   "fileUploader.fileExtensionBlocked": "Questo tipo di file è bloccato per motivi di sicurezza",
   "fileUploader.fileExtensionNotSupport": "Estensione del file non supportata",
   "fileUploader.pasteFileLink": "Incolla il collegamento del file",
