@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "Incolla il collegamento del file",
   "fileUploader.pasteFileLinkInputPlaceholder": "Inserisci l'URL...",
   "fileUploader.pasteFileLinkInvalid": "Collegamento file non valido",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "Il caricamento dei file è disabilitato",
   "fileUploader.uploadFromComputer": "Caricamento locale",
   "fileUploader.uploadFromComputerLimit": "Il caricamento di {{type}} non può superare {{size}}",

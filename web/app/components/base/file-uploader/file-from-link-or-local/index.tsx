@@ -3,14 +3,14 @@ import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { toast } from '@langgenius/dify-ui/toast'
-import { RiGlobalLine, RiUploadCloud2Line } from '@remixicon/react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FILE_URL_REGEX } from '../constants'
 import FileInput from '../file-input'
 import { useFile } from '../hooks'
 import { useStore } from '../store'
-import { useCaptureWebPage } from '../use-capture-web-page'
+import { useCaptureWebPage, usePickWebElement } from '../use-embed-bridge'
 
 type FileFromLinkOrLocalProps = {
   showFromLink?: boolean
@@ -39,8 +39,10 @@ const FileFromLinkOrLocal = ({
   const [url, setUrl] = useState('')
   const [showError, setShowError] = useState(false)
   const [isCapturing, setIsCapturing] = useState(false)
+  const [isPicking, setIsPicking] = useState(false)
   const { handleLoadFileFromLink, handleLocalFileUpload } = useFile(fileConfig)
   const { captureWebPage } = useCaptureWebPage()
+  const { pickElement } = usePickWebElement()
   const disabled = !!fileConfig.number_limits && files.length >= fileConfig.number_limits
   const fileLinkPlaceholder = t(($) => $['fileUploader.pasteFileLinkInputPlaceholder'], {
     ns: 'common',
@@ -60,21 +62,44 @@ const FileFromLinkOrLocal = ({
     setUrl('')
   }
 
+  const uploadHtml = useCallback(
+    (html: string, title?: string) => {
+      const fileName = (title || '').replace(/[\\/:*?"<>|]+/g, '_').trim() || 'page'
+      handleLocalFileUpload(new File([html], `${fileName}.html`, { type: 'text/html' }))
+    },
+    [handleLocalFileUpload],
+  )
+
   const handleCaptureWebPage = useCallback(async () => {
     setIsCapturing(true)
     try {
-      const page = await captureWebPage()
-      if (!page?.html) {
+      const result = await captureWebPage()
+      if (result.status !== 'success' || !result.payload.html) {
         toast.error(t(($) => $['fileUploader.captureWebPageFailed'], { ns: 'common' }))
         return
       }
-      const safeTitle = (page.title || '').replace(/[\\/:*?"<>|]+/g, '_').trim() || 'page'
-      const file = new File([page.html], `${safeTitle}.html`, { type: 'text/html' })
-      handleLocalFileUpload(file)
+      uploadHtml(result.payload.html, result.payload.title)
+      setOpen(false)
     } finally {
       setIsCapturing(false)
     }
-  }, [captureWebPage, handleLocalFileUpload, t])
+  }, [captureWebPage, t, uploadHtml])
+
+  const handlePickWebElement = useCallback(async () => {
+    setIsPicking(true)
+    try {
+      const result = await pickElement()
+      if (result.status === 'cancelled') return
+      if (result.status !== 'success' || !result.payload.html) {
+        toast.error(t(($) => $['fileUploader.pickWebElementFailed'], { ns: 'common' }))
+        return
+      }
+      uploadHtml(result.payload.html, result.payload.title)
+      setOpen(false)
+    } finally {
+      setIsPicking(false)
+    }
+  }, [pickElement, t, uploadHtml])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -123,23 +148,48 @@ const FileFromLinkOrLocal = ({
           {showFromLink && showFromLocal && <OrDivider />}
           {showFromLocal && (
             <Button className="relative w-full" variant="secondary-accent" disabled={disabled}>
-              <RiUploadCloud2Line className="mr-1 size-4" />
+              <span className="mr-1 i-ri-upload-cloud-2-line size-4" aria-hidden="true" />
               {t(($) => $['fileUploader.uploadFromComputer'], { ns: 'common' })}
               <FileInput fileConfig={fileConfig} />
             </Button>
           )}
           {showCaptureWebPage && showFromLocal && <OrDivider />}
           {showCaptureWebPage && (
-            <Button
-              className="relative w-full"
-              variant="secondary-accent"
-              disabled={disabled}
-              loading={isCapturing}
-              onClick={handleCaptureWebPage}
-            >
-              {!isCapturing && <RiGlobalLine className="mr-1 size-4" />}
-              {t(($) => $['fileUploader.captureWebPage'], { ns: 'common' })}
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                className="grow"
+                variant="secondary-accent"
+                disabled={disabled}
+                loading={isCapturing}
+                onClick={handleCaptureWebPage}
+              >
+                {!isCapturing && (
+                  <span className="mr-1 i-ri-global-line size-4" aria-hidden="true" />
+                )}
+                {t(($) => $['fileUploader.captureWebPage'], { ns: 'common' })}
+              </Button>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      className="w-8 shrink-0 px-0"
+                      variant="secondary-accent"
+                      aria-label={t(($) => $['fileUploader.pickWebElement'], { ns: 'common' })}
+                      disabled={disabled}
+                      loading={isPicking}
+                      onClick={handlePickWebElement}
+                    >
+                      {!isPicking && (
+                        <span className="i-ri-dropper-line size-4" aria-hidden="true" />
+                      )}
+                    </Button>
+                  }
+                />
+                <TooltipContent>
+                  {t(($) => $['fileUploader.pickWebElement'], { ns: 'common' })}
+                </TooltipContent>
+              </Tooltip>
+            </div>
           )}
         </div>
       </PopoverContent>

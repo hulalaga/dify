@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "Вставити посилання на файл",
   "fileUploader.pasteFileLinkInputPlaceholder": "Введіть URL-адресу...",
   "fileUploader.pasteFileLinkInvalid": "Неприпустиме посилання на файл",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "Завантаження файлів вимкнено",
   "fileUploader.uploadFromComputer": "Локальне завантаження",
   "fileUploader.uploadFromComputerLimit": "Завантаження {{type}} не може перевищувати {{size}}",

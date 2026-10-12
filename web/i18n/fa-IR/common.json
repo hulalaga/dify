@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "پیوند فایل را جایگذاری کنید",
   "fileUploader.pasteFileLinkInputPlaceholder": "URL را وارد کنید...",
   "fileUploader.pasteFileLinkInvalid": "پیوند فایل نامعتبر",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "بارگذاری فایل غیرفعال است",
   "fileUploader.uploadFromComputer": "آپلود محلی",
   "fileUploader.uploadFromComputerLimit": "آپلود {{type}} نمی تواند از {{size}} تجاوز کند",

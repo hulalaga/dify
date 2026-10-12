@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "لصق رابط الملف",
   "fileUploader.pasteFileLinkInputPlaceholder": "أدخل URL...",
   "fileUploader.pasteFileLinkInvalid": "رابط الملف غير صالح",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "تم تعطيل رفع الملفات",
   "fileUploader.uploadFromComputer": "تحميل محلي",
   "fileUploader.uploadFromComputerLimit": "تحميل {{type}} لا يمكن أن يتجاوز {{size}}",

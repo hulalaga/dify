@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "วางลิงค์ไฟล์",
   "fileUploader.pasteFileLinkInputPlaceholder": "ป้อน URL...",
   "fileUploader.pasteFileLinkInvalid": "ลิงก์ไฟล์ไม่ถูกต้อง",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "การอัปโหลดไฟล์ถูกปิดใช้งาน",
   "fileUploader.uploadFromComputer": "อัปโหลดในเครื่อง",
   "fileUploader.uploadFromComputerLimit": "อัปโหลด {{type}} ต้องไม่เกิน {{size}}",

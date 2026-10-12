@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "Prilepi povezavo do datoteke",
   "fileUploader.pasteFileLinkInputPlaceholder": "Vnesite URL ...",
   "fileUploader.pasteFileLinkInvalid": "Neveljavna povezava do datoteke",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "Nalaganje datotek je onemogočeno",
   "fileUploader.uploadFromComputer": "Lokalno nalaganje",
   "fileUploader.uploadFromComputerLimit": "Nalaganje {{type}} ne sme presegati {{size}}",

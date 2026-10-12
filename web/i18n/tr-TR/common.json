@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "Dosya bağlantısını yapıştır",
   "fileUploader.pasteFileLinkInputPlaceholder": "URL'yi giriniz...",
   "fileUploader.pasteFileLinkInvalid": "Geçersiz dosya bağlantısı",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "Dosya yükleme devre dışı",
   "fileUploader.uploadFromComputer": "Yerel yükleme",
   "fileUploader.uploadFromComputerLimit": "{{type}} yüklemesi {{size}}'ı aşamaz",

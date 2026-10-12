@@ -213,6 +213,38 @@
       resetIframePosition()
     }
 
+    // Element picker state: the webapp asks the host page to let the user
+    // pick a single element, the same way the Chrome DevTools inspector does.
+    const pickerOverlayId = 'dify-chatbot-picker-overlay'
+    const pickerLabelId = 'dify-chatbot-picker-label'
+    const pickerStyleId = 'dify-chatbot-picker-style'
+    let stopElementPicker = null
+
+    const postToIframe = (message) => {
+      document.getElementById(iframeId)?.contentWindow?.postMessage(message, targetOrigin)
+    }
+
+    // Remove everything this script injected into the host page (bubble button,
+    // chat iframe, picker UI and their styles) plus the embed script tags, so
+    // captured HTML never contains dify's own UI.
+    const stripDifyNodes = (root) => {
+      root
+        .querySelectorAll(
+          `#${buttonId}, #${iframeId}, #${styleId}, #${pickerOverlayId}, #${pickerLabelId}, #${pickerStyleId}, script[src*="embed.min.js"], script[src*="embed.js"]`,
+        )
+        .forEach((node) => node.remove())
+      return root
+    }
+
+    const withDoctype = (html) =>
+      `${document.doctype ? `<!DOCTYPE ${document.doctype.name}>\n` : '<!DOCTYPE html>\n'}${html}`
+
+    const wrapInDocument = (bodyHtml) => {
+      const doc = document.implementation.createHTMLDocument(document.title)
+      doc.body.innerHTML = bodyHtml
+      return withDoctype(doc.documentElement.outerHTML)
+    }
+
     window.addEventListener('message', (event) => {
       if (event.origin !== targetOrigin) return
 
@@ -240,36 +272,199 @@
       if (event.data.type === 'dify-chatbot-request-page-html') {
         let payload
         try {
-          // Serialize a copy so the host page keeps rendering untouched, and
-          // strip everything this script injected into it (bubble button, chat
-          // iframe, its styles) plus the embed script tags themselves, so the
-          // captured page does not contain dify's own UI.
-          const clone = document.documentElement.cloneNode(true)
-          clone
-            .querySelectorAll(
-              `#${buttonId}, #${iframeId}, #${styleId}, script[src*="embed.min.js"], script[src*="embed.js"]`,
-            )
-            .forEach((node) => node.remove())
-          const doctype = document.doctype
-            ? `<!DOCTYPE ${document.doctype.name}>\n`
-            : '<!DOCTYPE html>\n'
+          const clone = stripDifyNodes(document.documentElement.cloneNode(true))
           payload = {
-            html: doctype + clone.outerHTML,
+            html: withDoctype(clone.outerHTML),
             title: document.title,
             url: window.location.href,
           }
         } catch (error) {
           payload = { error: error instanceof Error ? error.message : String(error) }
         }
-        targetIframe.contentWindow?.postMessage(
-          {
-            type: 'dify-chatbot-page-html',
-            payload,
-          },
-          targetOrigin,
-        )
+        postToIframe({
+          type: 'dify-chatbot-page-html',
+          payload,
+        })
+      }
+
+      if (event.data.type === 'dify-chatbot-pick-element-start') {
+        startElementPicker()
+      }
+
+      if (event.data.type === 'dify-chatbot-pick-element-cancel' && stopElementPicker) {
+        stopElementPicker(false)
       }
     })
+
+    // Highlight the element under the cursor like DevTools and send the picked
+    // element back to the webapp as an HTML document.
+    function startElementPicker() {
+      if (stopElementPicker) return
+
+      const overlay = document.createElement('div')
+      overlay.id = pickerOverlayId
+      const label = document.createElement('div')
+      label.id = pickerLabelId
+      const pickerStyle = document.createElement('style')
+      pickerStyle.id = pickerStyleId
+      pickerStyle.textContent = `
+        html.dify-chatbot-picking, html.dify-chatbot-picking * { cursor: crosshair !important; }
+        #${pickerOverlayId} {
+          position: fixed;
+          display: none;
+          pointer-events: none;
+          z-index: 2147483646;
+          box-sizing: border-box;
+          background-color: rgba(111, 168, 220, 0.5);
+          border: 1px solid rgba(74, 144, 226, 0.9);
+        }
+        #${pickerLabelId} {
+          position: fixed;
+          display: none;
+          pointer-events: none;
+          z-index: 2147483647;
+          max-width: 20rem;
+          padding: 0.125rem 0.375rem;
+          border-radius: 0.25rem;
+          background-color: rgba(32, 32, 32, 0.92);
+          color: #fff;
+          font-family: Menlo, Consolas, monospace;
+          font-size: 0.6875rem;
+          line-height: 1rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      `
+      document.head.appendChild(pickerStyle)
+      document.body.appendChild(overlay)
+      document.body.appendChild(label)
+      document.documentElement.classList.add('dify-chatbot-picking')
+
+      const targetIframe = document.getElementById(iframeId)
+      const targetButton = document.getElementById(buttonId)
+      const previousIframeVisibility = targetIframe ? targetIframe.style.visibility : ''
+      const previousButtonDisplay = targetButton ? targetButton.style.display : ''
+      // Get dify's own UI out of the way so any element can be picked.
+      if (targetIframe) targetIframe.style.visibility = 'hidden'
+      if (targetButton) targetButton.style.display = 'none'
+
+      let currentElement = null
+
+      const describeElement = (element) => {
+        const id = element.id ? `#${element.id}` : ''
+        const classNames =
+          typeof element.className === 'string' && element.className.trim()
+            ? `.${element.className.trim().split(/\s+/).join('.')}`
+            : ''
+        const rect = element.getBoundingClientRect()
+        return `${element.tagName.toLowerCase()}${id}${classNames} ${Math.round(rect.width)} × ${Math.round(rect.height)}`
+      }
+
+      const hideHighlight = () => {
+        overlay.style.display = 'none'
+        label.style.display = 'none'
+      }
+
+      const highlightElement = (element) => {
+        if (!element || element.nodeType !== 1) {
+          hideHighlight()
+          return
+        }
+        const rect = element.getBoundingClientRect()
+        if (!rect.width && !rect.height) {
+          hideHighlight()
+          return
+        }
+        overlay.style.display = 'block'
+        overlay.style.left = `${rect.left}px`
+        overlay.style.top = `${rect.top}px`
+        overlay.style.width = `${rect.width}px`
+        overlay.style.height = `${rect.height}px`
+
+        label.textContent = describeElement(element)
+        label.style.display = 'block'
+        const labelRect = label.getBoundingClientRect()
+        const fitsAbove = rect.top - labelRect.height - 4 >= 0
+        label.style.left = `${Math.min(Math.max(rect.left, 4), Math.max(window.innerWidth - labelRect.width - 4, 4))}px`
+        label.style.top = `${fitsAbove ? rect.top - labelRect.height - 4 : rect.bottom + 4}px`
+      }
+
+      const handleMouseMove = (event) => {
+        currentElement = document.elementFromPoint(event.clientX, event.clientY)
+        highlightElement(currentElement)
+      }
+      const handleReflow = () => {
+        if (currentElement) highlightElement(currentElement)
+      }
+      const stopEvent = (event) => {
+        event.preventDefault()
+        event.stopImmediatePropagation()
+      }
+      const handleKeyDown = (event) => {
+        if (event.key !== 'Escape') return
+        stopEvent(event)
+        finishPicker(false)
+      }
+      const handleMouseDown = (event) => {
+        stopEvent(event)
+      }
+      const handleMouseUp = (event) => {
+        stopEvent(event)
+        finishPicker(true)
+      }
+      const handleClick = (event) => {
+        stopEvent(event)
+      }
+
+      const finishPicker = (confirm) => {
+        window.removeEventListener('mousemove', handleMouseMove, true)
+        window.removeEventListener('mousedown', handleMouseDown, true)
+        window.removeEventListener('mouseup', handleMouseUp, true)
+        window.removeEventListener('click', handleClick, true)
+        window.removeEventListener('keydown', handleKeyDown, true)
+        window.removeEventListener('scroll', handleReflow, true)
+        window.removeEventListener('resize', handleReflow, true)
+        document.documentElement.classList.remove('dify-chatbot-picking')
+        if (targetIframe) targetIframe.style.visibility = previousIframeVisibility
+        if (targetButton) targetButton.style.display = previousButtonDisplay
+        overlay.remove()
+        label.remove()
+        pickerStyle.remove()
+        stopElementPicker = null
+
+        if (!confirm || !currentElement) {
+          postToIframe({ type: 'dify-chatbot-element-pick-cancelled' })
+          return
+        }
+
+        let payload
+        try {
+          const clone = stripDifyNodes(currentElement.cloneNode(true))
+          payload = {
+            html: wrapInDocument(clone.outerHTML),
+            title: document.title,
+            url: window.location.href,
+          }
+        } catch (error) {
+          payload = { error: error instanceof Error ? error.message : String(error) }
+        }
+        postToIframe({
+          type: 'dify-chatbot-element-picked',
+          payload,
+        })
+      }
+
+      window.addEventListener('mousemove', handleMouseMove, true)
+      window.addEventListener('mousedown', handleMouseDown, true)
+      window.addEventListener('mouseup', handleMouseUp, true)
+      window.addEventListener('click', handleClick, true)
+      window.addEventListener('keydown', handleKeyDown, true)
+      window.addEventListener('scroll', handleReflow, true)
+      window.addEventListener('resize', handleReflow, true)
+
+      stopElementPicker = finishPicker
+    }
 
     // Function to create the chat button
     function createButton() {

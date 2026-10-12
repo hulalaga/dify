@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "ファイルリンクの貼り付け",
   "fileUploader.pasteFileLinkInputPlaceholder": "URL を入力...",
   "fileUploader.pasteFileLinkInvalid": "無効なファイルリンク",
+  "fileUploader.pickWebElement": "ページ要素を取得",
+  "fileUploader.pickWebElementFailed": "ページ要素の取得に失敗しました。もう一度お試しください。",
   "fileUploader.uploadDisabled": "ファイルアップロードは無効です",
   "fileUploader.uploadFromComputer": "ローカルアップロード",
   "fileUploader.uploadFromComputerLimit": "{{type}}のアップロードは{{size}}を超えてはなりません",

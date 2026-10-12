@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "粘贴文件链接",
   "fileUploader.pasteFileLinkInputPlaceholder": "输入文件链接",
   "fileUploader.pasteFileLinkInvalid": "文件链接无效",
+  "fileUploader.pickWebElement": "吸取网页元素",
+  "fileUploader.pickWebElementFailed": "吸取网页元素失败，请重试。",
   "fileUploader.uploadDisabled": "文件上传已被禁用",
   "fileUploader.uploadFromComputer": "从本地上传",
   "fileUploader.uploadFromComputerLimit": "上传 {{type}} 不能超过 {{size}}",

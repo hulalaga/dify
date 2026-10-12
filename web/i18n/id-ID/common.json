@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "Tempel tautan file",
   "fileUploader.pasteFileLinkInputPlaceholder": "Masukkan URL...",
   "fileUploader.pasteFileLinkInvalid": "Tautan file tidak valid",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "Unggah file dinonaktifkan",
   "fileUploader.uploadFromComputer": "Unggahan lokal",
   "fileUploader.uploadFromComputerLimit": "Unggahan {{type}} tidak boleh melebihi {{size}}",

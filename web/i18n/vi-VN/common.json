@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "Dán liên kết tệp",
   "fileUploader.pasteFileLinkInputPlaceholder": "Nhập URL...",
   "fileUploader.pasteFileLinkInvalid": "Liên kết tệp không hợp lệ",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "Tải tệp bị vô hiệu hóa",
   "fileUploader.uploadFromComputer": "Tải lên cục bộ",
   "fileUploader.uploadFromComputerLimit": "Tải lên {{type}} không được vượt quá {{size}}",

@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "Wklej link do pliku",
   "fileUploader.pasteFileLinkInputPlaceholder": "Wpisz adres URL...",
   "fileUploader.pasteFileLinkInvalid": "Nieprawidłowy link do pliku",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "Przesyłanie plików jest wyłączone",
   "fileUploader.uploadFromComputer": "Przesyłanie lokalne",
   "fileUploader.uploadFromComputerLimit": "Przesyłanie {{type}} nie może przekraczać {{size}}",

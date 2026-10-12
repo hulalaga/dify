@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "फ़ाइल लिंक पेस्ट करें",
   "fileUploader.pasteFileLinkInputPlaceholder": "URL दर्ज करें...",
   "fileUploader.pasteFileLinkInvalid": "अमान्य फ़ाइल लिंक",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "फ़ाइल अपलोड अक्षम है",
   "fileUploader.uploadFromComputer": "स्थानीय अपलोड",
   "fileUploader.uploadFromComputerLimit": "{{type}} अपलोड {{size}} से ज़्यादा नहीं हो सकता",

@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "Lipiți linkul fișierului",
   "fileUploader.pasteFileLinkInputPlaceholder": "Introduceți adresa URL...",
   "fileUploader.pasteFileLinkInvalid": "Link fișier nevalid",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "Încărcarea fișierelor este dezactivată",
   "fileUploader.uploadFromComputer": "Încărcare locală",
   "fileUploader.uploadFromComputerLimit": "Încărcarea {{type}} nu poate depăși {{size}}",

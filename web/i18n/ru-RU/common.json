@@ -172,6 +172,8 @@
   "fileUploader.pasteFileLink": "Вставить ссылку на файл",
   "fileUploader.pasteFileLinkInputPlaceholder": "Введите URL...",
   "fileUploader.pasteFileLinkInvalid": "Неверная ссылка на файл",
+  "fileUploader.pickWebElement": "Pick page element",
+  "fileUploader.pickWebElementFailed": "Failed to pick the element, please try again.",
   "fileUploader.uploadDisabled": "Загрузка файлов отключена",
   "fileUploader.uploadFromComputer": "Локальная загрузка",
   "fileUploader.uploadFromComputerLimit": "Загрузка {{type}} не может превышать {{size}}",
