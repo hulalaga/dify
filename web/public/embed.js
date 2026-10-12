@@ -11,6 +11,7 @@
   const configKey = 'difyChatbotConfig'
   const buttonId = 'dify-chatbot-bubble-button'
   const iframeId = 'dify-chatbot-bubble-window'
+  const styleId = 'dify-chatbot-bubble-style'
   const config = window[configKey]
   let isExpanded = false
 
@@ -239,11 +240,21 @@
       if (event.data.type === 'dify-chatbot-request-page-html') {
         let payload
         try {
+          // Serialize a copy so the host page keeps rendering untouched, and
+          // strip everything this script injected into it (bubble button, chat
+          // iframe, its styles) plus the embed script tags themselves, so the
+          // captured page does not contain dify's own UI.
+          const clone = document.documentElement.cloneNode(true)
+          clone
+            .querySelectorAll(
+              `#${buttonId}, #${iframeId}, #${styleId}, script[src*="embed.min.js"], script[src*="embed.js"]`,
+            )
+            .forEach((node) => node.remove())
           const doctype = document.doctype
             ? `<!DOCTYPE ${document.doctype.name}>\n`
             : '<!DOCTYPE html>\n'
           payload = {
-            html: doctype + document.documentElement.outerHTML,
+            html: doctype + clone.outerHTML,
             title: document.title,
             url: window.location.href,
           }
@@ -284,6 +295,7 @@
 
       // Add styles for the button
       const styleSheet = document.createElement('style')
+      styleSheet.id = styleId
       document.head.appendChild(styleSheet)
       styleSheet.sheet.insertRule(`
         #${containerDiv.id} {
